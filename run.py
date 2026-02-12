@@ -1,0 +1,12 @@
+import os
+
+from app import create_app
+from dotenv import load_dotenv
+
+load_dotenv()
+
+app, celery = create_app()
+app.app_context().push()
+
+if __name__ == "__main__":
+    app.run(debug=True, port=os.getenv("APP_PORT"), host="0.0.0.0")

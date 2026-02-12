@@ -1,0 +1,66 @@
+{
+  "git.autofetch": true,
+  "python.analysis.autoImportCompletions": true,
+
+  // Configure settings to be overridden for the dockercompose language.
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+
+  // Configure settings to be overridden for the dockerfile language.
+  "[dockerfile]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    }
+  },
+
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace"
+  },
+
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  "black-formatter.args": [
+    "--line-length",
+    "200",
+    "--skip-string-normalization"
+  ],
+  "isort.args": [
+    "--profile",
+    "black",
+    "--line-length",
+    "200",
+    "--multi-line",
+    "2",
+    "--lines-after-imports",
+    "2",
+    "--section-default=THIRDPARTY"
+  ],
+  // Configure settings to be overridden for the yaml language.
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "keep",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  }
+}

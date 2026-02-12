@@ -1,0 +1,67 @@
+services:
+  whisper-api:
+    build: .
+    container_name: "${APP_ENV}-whisper-api"
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    environment:
+      - WHISPER_MODEL=large
+    env_file:
+      - .env
+    volumes:
+      - ./:/app/whisper_api
+      - ../whisper-cache:/root/.cache
+
+    user: "${DOCKER_UID:-1000}:${DOCKER_GID:-1000}"
+
+    tty: true
+    stdin_open: true
+    networks:
+      - whisper
+
+    command: ["sh", "-c", "cd /app/whisper_api && python3 -B -m run"]
+
+  celery-worker:
+    build: .
+    restart: always
+    container_name: "${APP_ENV}-celery-worker"
+    command:
+      [
+        "celery",
+        "-A",
+        "run.celery",
+        "worker",
+        "--loglevel=info",
+        "--concurrency=1",
+      ]
+    volumes:
+      - ./:/app/whisper_api
+      - ../whisper-cache:/root/.cache
+    env_file:
+      - .env
+
+    tty: true
+    stdin_open: true
+    networks:
+      - whisper
+
+  redis:
+    image: redis:7.4.1
+    container_name: "${APP_ENV}-redis"
+    command: ["redis-server", "--port", "${REDIS_PORT}"]
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    restart: always
+    networks:
+      - whisper
+volumes:
+  whisper-db:
+
+networks:
+  whisper:
+    name: whisper
+    driver: bridge
+  traefik:
+    external: true
